@@ -1,12 +1,24 @@
+document.getElementById("searchButton").addEventListener("click", searchAnime);
+
 async function searchAnime() {
-    let query = document.getElementById("searchBox").value;
+    let query = document.getElementById("searchBox").value.trim();
     let resultsDiv = document.getElementById("results");
-    
-    resultsDiv.innerHTML = "<p>Searching...</p>";
+
+    if (query === "") {
+        resultsDiv.innerHTML = "<p>⚠ Please enter an anime name.</p>";
+        return;
+    }
+
+    resultsDiv.innerHTML = "<p>🔍 Searching for '" + query + "'...</p>";
 
     try {
         let response = await fetch(`https://api.consumet.org/anime/gogoanime/${query}`);
         let data = await response.json();
+
+        if (!data.results || data.results.length === 0) {
+            resultsDiv.innerHTML = "<p>❌ No results found. Try another keyword.</p>";
+            return;
+        }
 
         resultsDiv.innerHTML = ""; 
 
@@ -15,7 +27,7 @@ async function searchAnime() {
                 <div>
                     <h3>${anime.title}</h3>
                     <img src="${anime.image}" width="150">
-                    <p><a href="#" onclick="playVideo('${anime.id}')">Watch Now</a></p>
+                    <p><button onclick="playVideo('${anime.id}')">▶ Watch Now</button></p>
                 </div>
                 <hr>
             `;
@@ -23,8 +35,8 @@ async function searchAnime() {
         });
 
     } catch (error) {
-        resultsDiv.innerHTML = "<p>Sorry, no results found.</p>";
-        console.error("Error fetching data:", error);
+        resultsDiv.innerHTML = "<p>❌ Error fetching data. Please try again later.</p>";
+        console.error("API Fetch Error:", error);
     }
 }
 
@@ -40,11 +52,11 @@ async function playVideo(animeId) {
             player.src = data.sources[0].url;
             videoDiv.style.display = "block";
         } else {
-            alert("No video available for this anime.");
+            alert("❌ No video available for this anime.");
         }
     } catch (error) {
-        console.error("Error fetching video:", error);
-        alert("Failed to load video.");
+        console.error("Video Fetch Error:", error);
+        alert("❌ Failed to load video.");
     }
 }
 
