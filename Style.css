@@ -1,6 +1,35 @@
+
 body {
     font-family: Arial, sans-serif;
     text-align: center;
     background-color: #121212;
     color: white;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #1e1e1e;
+    padding: 20px;
+}
+
+input, button {
+    padding: 10px;
+    margin: 10px;
+    border: none;
+    font-size: 16px;
+}
+
+input {
+    width: 60%;
+}
+
+button {
+    background: #ff5722;
+    color: white;
+    cursor: pointer;
+}
+
+#results {
+    margin-top: 20px;
 }
